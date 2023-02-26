@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import DangerAlert from "../../Alerts/DangerAlert";
 import { Authcontext } from "../../../Context/AuthContext";
 import { UserSchema } from "../../../Validations/UserValidation";
+import DeleteAlert from "../Alters_buttons/DeleteAlert";
 const LoginUrl = "/users/"; 
 
 const EditUserForm = () => {
@@ -19,6 +20,14 @@ const EditUserForm = () => {
   const currentUser = isUserData.filter((element, index) => {
     return element.id == isEditIndex;
   });
+
+  // Show and Hide Delete Alert
+  const [isDeleteAlert , setisDeleteAlert] = useState(false);
+
+  // set Delete Value
+  const handleDeleteAlert = (value) => {
+    setisDeleteAlert(value);
+  }
 
 
   // initial fome value
@@ -199,10 +208,11 @@ const EditUserForm = () => {
           </Button>
         )}
 
-        <Button variant="danger" type="button" className="w-40 ml-2 "  onClick={HandleDelete}>
+        <Button variant="danger" type="button" className="w-40 ml-2 "  onClick={() =>setisDeleteAlert(true)}>
           Delete
         </Button>
       </Form>
+      <DeleteAlert isDeleteAlert={isDeleteAlert} handleDeleteAlert={handleDeleteAlert}  HandleDelete={HandleDelete}/>
     </div>
   );
 };

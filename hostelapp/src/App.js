@@ -10,6 +10,8 @@ import Home from './Components/Main/Home';
 import Profile from './Components/User/Profile';
 import AdminDashboard from './Components/Admin/admindashbord';
 import UserInformation from './Components/Admin/UserInformation';
+import Protected from './Components/Protected_Routes/ProtectRoutes';
+import ProtectedAdmin from './Components/Protected_Routes/ProtectAdminRoutes';
 
 
 function App() {
@@ -17,10 +19,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}>
           <Route index element={<LandingPage />} />
-          <Route path="/profile" element = {<Profile />} />
+
+          {/* Protected Routes Only Acceess Logged User */}
+          <Route path="/profile" element = {<Protected><Profile /></Protected>} />
 
           {/* Admin Routes only Access Admin */}
-          <Route path="/admindashboard" element = {<AdminDashboard />}>
+          <Route path="/admindashboard" element = {<ProtectedAdmin><AdminDashboard /></ProtectedAdmin>}>
                 <Route path="userinformation" element = {<UserInformation />}/>
                 <Route index element = {<Profile />} />
           </Route>

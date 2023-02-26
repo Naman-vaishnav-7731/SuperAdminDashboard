@@ -9,12 +9,12 @@ import { ModalContext } from "../../Context/ModalContext";
 import EditUserModal from "./Edit_Users/EditUserModal";
 import { Authcontext } from "../../Context/AuthContext";
 import PagesPagination from "./Pagination/pagination";
-import { useFormik } from "formik";
+
 const LoginUrl = "/users/";
 
 const UserInformation = () => {
   const AuthToken = JSON.parse(localStorage.getItem("Token"));
-  const { isEditShow, setisEditShow } = useContext(ModalContext);
+  const { setisEditShow } = useContext(ModalContext);
   const { isUserData, setisUserData, setisEditIndex, isForcerender } =
     useContext(Authcontext);
   console.log(isUserData);
@@ -28,7 +28,7 @@ const UserInformation = () => {
   const indexOfLastrecored = (isCurrentpage * rescordPerpage);
   const indexOfFirstrecored = indexOfLastrecored - rescordPerpage;
   const TotalPages = Math.ceil(isUserData.length / rescordPerpage);
-  let sNo = indexOfFirstrecored == 0 ? 1 : indexOfFirstrecored;
+  let sNo = indexOfFirstrecored;
 
   // Serach query
   const [isQuery, setisQuery] = useState("");
@@ -118,12 +118,12 @@ const UserInformation = () => {
                   user.address.toLowerCase().includes(isQuery.trim())
                 );
               })
-              .slice(indexOfFirstrecored, indexOfLastrecored + 1)
+              .slice(indexOfFirstrecored, indexOfLastrecored)
               .map((element, index) => {
                 return (
                   <>
                     <tr>
-                      <td>{sNo++}</td>
+                      <td>{++sNo}</td>
                       <td>{element?.fname}</td>
                       <td>{element?.lname}</td>
                       <td>{element?.email}</td>

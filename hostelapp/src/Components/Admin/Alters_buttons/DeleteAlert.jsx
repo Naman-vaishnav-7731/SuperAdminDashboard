@@ -1,48 +1,32 @@
-import React, { useState } from "react";
-import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import axios from "../../../api/axios";
-import { Authcontext } from "../../../Context/AuthContext";
-import { AlertContext } from "../../../Context/AlertContext";
-import { useContext } from "react";
-const LoginUrl = "/users/";
+import Modal from "react-bootstrap/Modal";
+import { useState } from "react";
 
-const DeleteAlert = (email) => {
-  const {setisForcerender } = useContext(Authcontext);
-  const {isDeleteAlert , setisDeleteAlert} = useContext(AlertContext);
-  console.log({email});
- 
-  // Implement delete user informarion functionlity
-  const HandleDelete = async () => {
-    try {
-      const response = await axios.delete(LoginUrl + email, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("Token"))}`,
-        },
-      });
-      console.log(response);
-      // forcefully re- render the component
-      setisForcerender((prev) => prev + 1);
-      setisDeleteAlert(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const DeleteAlert = ({ isDeleteAlert, handleDeleteAlert , HandleDelete }) => {
+  const handleClose = () => handleDeleteAlert(false);
+  console.log(isDeleteAlert);
+
+  // handle delete
+  const handledelete = () => {
+    HandleDelete();
+    handleDeleteAlert(false)
+}
+
   return (
     <>
-      <Alert show={isDeleteAlert} variant="danger">
-        <Alert.Heading>Are You Sure!</Alert.Heading>
-        <p>You Delete The User From Your website ! ⚠️</p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={HandleDelete} variant="outline-success">
-            Yes ! i Want To Delete
-          </Button>
-          <Button onClick={() => setisDeleteAlert(false)} variant="outline-success">
+      <Modal show={isDeleteAlert}  size="sm" animation="true" centered="true" className="bg-dark">
+        <Modal.Header className="bg-danger">
+          <Modal.Title className="text-light"><h5>Hey ! Admin Are Your Sure You Delete The User form our Website ? ?💀</h5></Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="success" onClick={handleClose}>
              No
           </Button>
-        </div>
-      </Alert>
+          <Button variant="danger" onClick={handledelete}>
+              Yes ! Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
