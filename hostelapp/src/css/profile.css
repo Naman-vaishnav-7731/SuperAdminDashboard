@@ -1,0 +1,40 @@
+.user-profile-card {
+    max-width: 600px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-profile-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .user-profile-image {
+    width: 100px;
+    height: 100px;
+    margin-right: 1rem;
+  }
+  
+  .user-profile-header-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-profile-header-text h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .user-profile-header-text p {
+    margin: 0;
+    font-size: 1rem;
+    color: #888;
+  }
+  
+  .card-text {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+  
