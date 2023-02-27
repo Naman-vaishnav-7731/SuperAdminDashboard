@@ -23,7 +23,7 @@ function App() {
           {/* Protected Routes Only Acceess Logged User */}
           <Route path="/profile" element = {<Protected><Profile /></Protected>} />
 
-          {/* Admin Routes only Access Admin */}
+          {/* Admin Routes only Access Admin User */}
           <Route path="/admindashboard" element = {<ProtectedAdmin><AdminDashboard /></ProtectedAdmin>}>
                 <Route path="userinformation" element = {<UserInformation />}/>
                 <Route index element = {<Profile />} />
