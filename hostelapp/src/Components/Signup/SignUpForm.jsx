@@ -1,5 +1,5 @@
 import { Form, Button } from "react-bootstrap";
-import { useFormik } from "formik";
+import { useFormik  } from "formik";
 import Signupschema from "../../Validations/SignUpvalidation";
 import axios from "axios";
 import { AlertContext } from "../../Context/AlertContext";
@@ -10,6 +10,7 @@ const SignUpForm = () => {
   const { isSignupAlert, setisSignupAlert } = useContext(AlertContext);
   const [isError, setisError] = useState([]);
   const [isAlertColor, setisAlertColor] = useState("");
+  const [isValue , setisValue] = useState("");
   // initial fome value
   const intialValues = {
     fname: "",
@@ -19,7 +20,7 @@ const SignUpForm = () => {
     address: "",
     pincode: "",
     password: "",
-    profileImage: "",
+    profileImage: null
   };
 
   // implements formik for form validation
@@ -31,18 +32,33 @@ const SignUpForm = () => {
     handleSubmit,
     values,
     resetForm,
+    setFieldValue
   } = useFormik({
     initialValues: intialValues,
     validationSchema: Signupschema,
     onSubmit: async (values, action) => {
       console.log("handle submit");
+      console.log(values);
+
+     
+    // using form data append the form data
+      const formData = new FormData();
+      formData.append("address",values.address);
+      formData.append("email",values.email);
+      formData.append("fname",values.fname);
+      formData.append("lname",values.lname);
+      formData.append("password",values.password);
+      formData.append("phone",values.phone);
+      formData.append("pincode",values.pincode);
+      formData.append("profileImage",values.profileImage);
+
       try {
         const { data } = await axios.post(
           "http://localhost:3001/users/register",
-          values,
+          formData,
           {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'multipart/form-data'
             },
           }
         );
@@ -71,7 +87,7 @@ const SignUpForm = () => {
   return (
     <div className="container">
       <DangerAlert color={isAlertColor} message={isError} />
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} encType="multipart/form-data">
         <Form.Group controlId="formBasicFirstName">
           <Form.Label>First Name</Form.Label>
           <Form.Control
@@ -182,8 +198,9 @@ const SignUpForm = () => {
           <Form.Control
             type="file"
             name="profileImage"
-            value={values.profileImage}
-            onChange={handleChange}
+            onChange={(e)=> {
+              setFieldValue('profileImage', e?.currentTarget?.files[0]) 
+            }}
             onBlur={handleBlur}
             placeholder="Upload Your Profile"
           />

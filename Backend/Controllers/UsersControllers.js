@@ -6,7 +6,6 @@ const asyncHandler = require('express-async-handler')
 const genreteToken = require('../Util/genreteToken')
 const validateRegistartion = require('../Validations/Registration'); 
 const validatelogin = require('../Validations/login');
-const { json } = require('body-parser');
 
 
 // get the users | @route /users | @access Private
@@ -17,6 +16,11 @@ const getUser = asyncHandler(async (req , res) => {
 
 // create a new user | @route /users | @access public
 const RegisterUser = asyncHandler(async (req, res) => {
+
+    const file = req.file?.filename;
+    console.log({file});
+    // console.log({file:req.file});
+    // console.log(file);
 
     // implement server side validations
     const {errors , isValid} = validateRegistartion(req.body);
@@ -45,6 +49,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
         address,
         pincode,
         userType,
+        image:file
     });
     console.log(user);
     // if the user succesfully created
@@ -137,4 +142,4 @@ const DeleteUser = asyncHandler(async (req, res) => {
     res.status(200).json({message:"Sucessfully User Is Deleted"});
 })
 
-module.exports = {getUser , RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser }  
+module.exports = {getUser , RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser } 

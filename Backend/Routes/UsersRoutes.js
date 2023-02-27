@@ -5,19 +5,20 @@ const Protect = require('../middleware/Authmiddleware')
 // upload image
 const multer = require('multer');
 
- // Upload profile image
+ // Upload profile image in location:D:\\ReactWorkspace\\StudyHub\\hostelapp\\src\\ProfileImages
  const uploadProfile = multer({
     storage:multer.diskStorage({
         destination:(req , file , callback) => {
-            callback(null , './ProfileImages')
+            callback(null , 'D:\\ReactWorkspace\\StudyHub\\hostelapp\\public\\userImage')
         },
         filename:(req , file , callback) => {
+            console.log({file})
             callback(null , file.fieldname + "-" + Date.now() + ".jpg");
         }
 
     })
     
-}).single("ProfileImages");
+}).single("profileImage");
 
 // Router for read the user profile
 Router.route('/').get([Protect , getUser]);
@@ -25,7 +26,7 @@ Router.route('/').get([Protect , getUser]);
 
 // Router for create the user profile | Register
 // implement the server side validation
-Router.route('/register').post(RegisterUser);
+Router.route('/register').post([uploadProfile , RegisterUser]);
 
 // Router for login  the user
 Router.route('/login').post(LoginUser);

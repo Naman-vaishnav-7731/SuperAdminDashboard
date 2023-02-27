@@ -41,6 +41,9 @@ module.exports = ( sequelize , DataTypes ) => {
             allowNull: false,
             defaultValue: 'user'
           },
+        image:{
+            type: DataTypes.STRING
+        }
         
     },{
         freezeTableName: true
@@ -48,6 +51,4 @@ module.exports = ( sequelize , DataTypes ) => {
 
     return Users;
 }
-
-
 

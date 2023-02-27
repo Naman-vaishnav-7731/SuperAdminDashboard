@@ -15,6 +15,7 @@ import axios from "../../api/axios";
 import { useContext } from "react";
 import { UserSchema } from "../../Validations/UserValidation";
 
+
 const URL = "/users/";
 
 const Profile = () => {
@@ -22,11 +23,12 @@ const Profile = () => {
   const currentUserEmail = JSON.parse(localStorage.getItem("userData")).email;
   const [isuserData, setisUserData] = useState([]);
   const {setisForcerender , isForcerender } = useContext(Authcontext);
+  
   const user = {
     name: isuserData?.fname + " " +  isuserData?.lname,
     username: isuserData?.fname,
     bio: `Hello ! I m ${isuserData?.fname + " " +  isuserData?.lname} 🧑‍💻. I m Also User StudyHub`,
-    imageSrc: "https://picsum.photos/200",
+    imageSrc:`/userimage/${isuserData.image}`
   };
 
   const fetchData = async () => {
@@ -183,7 +185,7 @@ const Profile = () => {
                         ></Form.Control>
                       </Form.Group>
                     </Col>
-                  </Row>
+                  </Row><br />
                   {isDislabled ? (
                     <Button
                       className="btn-fill pull-right"
@@ -221,7 +223,7 @@ const Profile = () => {
             </Card>
           </Col>
           <Col md="4">
-            <UserProfileCard {...user} />
+            <UserProfileCard {...user} isuserData={isuserData}/>
           </Col>
         </Row>
       </Container>
