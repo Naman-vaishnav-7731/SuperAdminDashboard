@@ -9,43 +9,37 @@ import { ModalContext } from "../../Context/ModalContext";
 import EditUserModal from "./Edit_Users/EditUserModal";
 import { Authcontext } from "../../Context/AuthContext";
 import PagesPagination from "./Pagination/pagination";
-
-const LoginUrl = "/users/";
+const userGeturl = "/users";
 
 const UserInformation = () => {
   const AuthToken = JSON.parse(localStorage.getItem("Token"));
   const { setisEditShow } = useContext(ModalContext);
-  const { isUserData, setisUserData, setisEditIndex, isForcerender } =
-    useContext(Authcontext);
-  console.log(isUserData);
+  const { isUserData, setisUserData, setisEditIndex, isForcerender } = useContext(Authcontext);
+  console.log({isUserData});
 
-  // Implementation of pagination
-  const [isCurrentpage, setisCurrentpage] = useState(1);
-  const [rescordPerpage] = useState(5);
-  console.log({ isCurrentpage });
+  // implement tottal no of page | size of pages | serach quary
+  const [SearchQuery, setSearchQuery] = useState("");
+  const [PageNo , setPageNo] = useState(0);
+  const [PageSize , setPageSize] = useState(5);
+  const [TotalPages , setTotalPages] = useState(0);
 
-  // Impelementaion of index for Pagination
-  const indexOfLastrecored = (isCurrentpage * rescordPerpage);
-  const indexOfFirstrecored = indexOfLastrecored - rescordPerpage;
-  const TotalPages = Math.ceil(isUserData.length / rescordPerpage);
-  let sNo = indexOfFirstrecored;
-
-  // Serach query
-  const [isQuery, setisQuery] = useState("");
 
   const paginate = (page) => {
-    setisCurrentpage(page);
+    setPageNo(page);
   };
 
   // fetch data from server
   const fetchuserData = async () => {
     try {
-      const response = await axios.get(LoginUrl, {
+      const response = await axios.get(userGeturl+`?search=${SearchQuery}&page=${PageNo}&size=${PageSize}`, {
         headers: { Authorization: `Bearer ${AuthToken}` },
         Accept: "application/json",
         "Content-Type": "application/json",
       });
-      setisUserData(response.data.filter((user) => user.userType !== "admin" ));
+      console.log(response);
+      setisUserData(response.data.users.filter((user) => user.userType !== "admin" ));
+      setTotalPages(response.data.totalPages);
+      
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +47,7 @@ const UserInformation = () => {
 
   useEffect(() => {
     fetchuserData();
-  }, [isForcerender]);
+  }, [isForcerender , SearchQuery , PageNo]);
 
   // Handle View Profile Index
   const HandleIndex = (event) => {
@@ -64,20 +58,9 @@ const UserInformation = () => {
   // handle change
   const handleChange = (event) => {
     console.log(event.target.value);
-    setisQuery(event.target.value);
+    setSearchQuery(event.target.value);
   };
 
-  console.log("serch",isUserData
-  .filter((user) => {
-    return (
-      user.fname.toLowerCase().includes(isQuery.trim()) ||
-      user.lname.toLowerCase().includes(isQuery.trim()) ||
-      user.email.toLowerCase().includes(isQuery.trim()) ||
-      user.phone.toLowerCase().includes(isQuery.trim()) ||
-      user.pincode.toLowerCase().includes(isQuery.trim()) ||
-      user.address.toLowerCase().includes(isQuery.trim())
-    );
-  }))
 
   return (
     <>
@@ -107,23 +90,11 @@ const UserInformation = () => {
             </tr>
           </thead>
           <tbody>
-            {isUserData
-              .filter((user) => {
-                return (
-                  user.fname.toLowerCase().includes(isQuery.trim()) ||
-                  user.lname.toLowerCase().includes(isQuery.trim()) ||
-                  user.email.toLowerCase().includes(isQuery.trim()) ||
-                  user.phone.toLowerCase().includes(isQuery.trim()) ||
-                  user.pincode.toLowerCase().includes(isQuery.trim()) ||
-                  user.address.toLowerCase().includes(isQuery.trim())
-                );
-              })
-              .slice(indexOfFirstrecored, indexOfLastrecored)
-              .map((element, index) => {
+            {isUserData.map((element, index) => {
                 return (
                   <>
                     <tr>
-                      <td>{++sNo}</td>
+                      <td>{1}</td>
                       <td>{element?.fname}</td>
                       <td>{element?.lname}</td>
                       <td>{element?.email}</td>

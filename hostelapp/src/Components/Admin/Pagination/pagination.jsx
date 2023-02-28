@@ -16,7 +16,7 @@ const PagesPagination = ({TotalPages , paginate}) => {
     <div>
       <Pagination>
         {items.map((ele, index) => {
-          return <Pagination.Item key={ele} onClick={() => paginate(ele)}>{ele}</Pagination.Item>;
+          return <Pagination.Item id={ele} onClick={() => paginate(index)}>{ele}</Pagination.Item>;
         })}
       </Pagination>
       <br />
