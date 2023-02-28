@@ -94,7 +94,7 @@ const UserInformation = () => {
                 return (
                   <>
                     <tr>
-                      <td>{1}</td>
+                      <td>{index+1}</td>
                       <td>{element?.fname}</td>
                       <td>{element?.lname}</td>
                       <td>{element?.email}</td>
