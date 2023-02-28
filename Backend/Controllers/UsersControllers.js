@@ -1,18 +1,66 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
+const Op = db.Sequelize.Op;
 const Users = db.users;
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler')
 const genreteToken = require('../Util/genreteToken')
 const validateRegistartion = require('../Validations/Registration'); 
 const validatelogin = require('../Validations/login');
+const validateUpdateProfile = require('../Validations/UpdateProfile');
 
 
-// get the users | @route /users | @access Private
-const getUser = asyncHandler(async (req , res) => {
-    const users = await Users.findAll();
-    res.status(200).send(users);
-})
+
+// // get the users | @route /users | @access Private
+// const getUser = asyncHandler(async (req , res) => {
+//     const users = await Users.findAll();
+//     res.status(200).send(users);
+// })
+
+ // get pagination | page no and | size of one page
+ const getPagination = (page , size) => {
+    // limit qual size of one page
+    const limit = size ? +size : 5;
+    const offset = page ? page * limit :0;
+    return {limit , offset};
+}
+
+const getPagingData = (data, page, limit) => {
+    const { count: totalusers, rows: users } = data;
+    const currentPage = page ? +page : 0;
+    const totalPages = Math.ceil(totalusers / limit);
+  
+    return { totalusers, users , totalPages, currentPage };
+  };
+
+//getUsers Data But Implement Limit and Offset For Pagination and Serach Filter
+const getUserData = asyncHandler(async (req , res) => {
+
+    const {search , page , size} = req.query;
+    
+    // user search something 
+    const serachUser = search ?  { fname: { [Op.like]: `%${search}%` } } : null;
+
+    // set limit and size
+    const {limit , offset} = getPagination(Number(page) , Number(size));
+
+     //Serach user data
+    try {
+        const data = await Users.findAndCountAll({
+            where:serachUser,
+            limit:limit,
+            offset:offset
+          });
+        const response = getPagingData(data, Number(page), limit);
+        res.status(200).json(response);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"some errors occurred while retrieving users"});
+    }
+});
+
+
 
 // create a new user | @route /users | @access public
 const RegisterUser = asyncHandler(async (req, res) => {
@@ -102,6 +150,12 @@ const CurrentUser = asyncHandler(async (req, res) => {
 
 // Update a user | @route /users/:email | @access Private
 const UpdateUser = asyncHandler(async (req, res) => {
+
+    // const {errors , isValid} = validateUpdateProfile(req.body);
+    // if(!isValid){
+    //     return res.status(400).json(errors);
+    // }
+
     const {email} = req.params;
 
     // Email is exiting or not
@@ -142,4 +196,4 @@ const DeleteUser = asyncHandler(async (req, res) => {
     res.status(200).json({message:"Sucessfully User Is Deleted"});
 })
 
-module.exports = {getUser , RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser } 
+module.exports = { RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser , getUserData} 

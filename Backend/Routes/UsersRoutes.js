@@ -1,6 +1,6 @@
 const express = require('express');
 const Router = express.Router();
-const {getUser , RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser } = require('../Controllers/UsersControllers')
+const {RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser , getUserData} = require('../Controllers/UsersControllers')
 const Protect = require('../middleware/Authmiddleware')
 // upload image
 const multer = require('multer');
@@ -21,8 +21,12 @@ const multer = require('multer');
 }).single("profileImage");
 
 // Router for read the user profile
-Router.route('/').get([Protect , getUser]);
+// Router.route('/').get([Protect , getUser]);
 // Router.route('/').get(validateUser , getUser);
+
+//Implenet Routes for Pagination and filter 
+// /users/
+Router.route('/').get([Protect , getUserData]);
 
 // Router for create the user profile | Register
 // implement the server side validation
