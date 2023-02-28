@@ -14,15 +14,15 @@ const userGeturl = "/users";
 const UserInformation = () => {
   const AuthToken = JSON.parse(localStorage.getItem("Token"));
   const { setisEditShow } = useContext(ModalContext);
-  const { isUserData, setisUserData, setisEditIndex, isForcerender } = useContext(Authcontext);
-  console.log({isUserData});
+  const { isUserData, setisUserData, setisEditIndex, isForcerender } =
+    useContext(Authcontext);
+  console.log({ isUserData });
 
   // implement tottal no of page | size of pages | serach quary
   const [SearchQuery, setSearchQuery] = useState("");
-  const [PageNo , setPageNo] = useState(0);
-  const [PageSize , setPageSize] = useState(5);
-  const [TotalPages , setTotalPages] = useState(0);
-
+  const [PageNo, setPageNo] = useState(0);
+  const [PageSize, setPageSize] = useState(5);
+  const [TotalPages, setTotalPages] = useState(0);
 
   const paginate = (page) => {
     setPageNo(page);
@@ -31,15 +31,19 @@ const UserInformation = () => {
   // fetch data from server
   const fetchuserData = async () => {
     try {
-      const response = await axios.get(userGeturl+`?search=${SearchQuery}&page=${PageNo}&size=${PageSize}`, {
-        headers: { Authorization: `Bearer ${AuthToken}` },
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      });
+      const response = await axios.get(
+        userGeturl + `?search=${SearchQuery}&page=${PageNo}&size=${PageSize}`,
+        {
+          headers: { Authorization: `Bearer ${AuthToken}` },
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }
+      );
       console.log(response);
-      setisUserData(response.data.users.filter((user) => user.userType !== "admin" ));
+      setisUserData(
+        response.data.users.filter((user) => user.userType !== "admin")
+      );
       setTotalPages(response.data.totalPages);
-      
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +51,7 @@ const UserInformation = () => {
 
   useEffect(() => {
     fetchuserData();
-  }, [isForcerender , SearchQuery , PageNo]);
+  }, [isForcerender, SearchQuery, PageNo]);
 
   // Handle View Profile Index
   const HandleIndex = (event) => {
@@ -57,10 +61,13 @@ const UserInformation = () => {
 
   // handle change
   const handleChange = (event) => {
-    console.log(event.target.value);
-    setSearchQuery(event.target.value);
-  };
+    // Implement Debounching for Search Somthing after certain time
+    const timeId = setTimeout(() => {
+      setSearchQuery(event.target.value);
+    }, 3000);
 
+    return () => clearTimeout(timeId);
+  };
 
   return (
     <>
@@ -91,29 +98,29 @@ const UserInformation = () => {
           </thead>
           <tbody>
             {isUserData.map((element, index) => {
-                return (
-                  <>
-                    <tr>
-                      <td>{index+1}</td>
-                      <td>{element?.fname}</td>
-                      <td>{element?.lname}</td>
-                      <td>{element?.email}</td>
-                      <td>{element?.phone}</td>
-                      <td>{element?.address}</td>
-                      <td>{element?.pincode}</td>
-                      <td>
-                        <Button
-                          onClick={HandleIndex}
-                          id={element?.id}
-                          variant="outline-success"
-                        >
-                          View
-                        </Button>
-                      </td>
-                    </tr>
-                  </>
-                );
-              })}
+              return (
+                <>
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{element?.fname}</td>
+                    <td>{element?.lname}</td>
+                    <td>{element?.email}</td>
+                    <td>{element?.phone}</td>
+                    <td>{element?.address}</td>
+                    <td>{element?.pincode}</td>
+                    <td>
+                      <Button
+                        onClick={HandleIndex}
+                        id={element?.id}
+                        variant="outline-success"
+                      >
+                        View
+                      </Button>
+                    </td>
+                  </tr>
+                </>
+              );
+            })}
           </tbody>
         </Table>
         <PagesPagination TotalPages={TotalPages} paginate={paginate} />
