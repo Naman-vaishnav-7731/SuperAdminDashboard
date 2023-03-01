@@ -12,6 +12,8 @@ import AdminDashboard from './Components/Admin/admindashbord';
 import UserInformation from './Components/Admin/UserInformation';
 import Protected from './Components/Protected_Routes/ProtectRoutes';
 import ProtectedAdmin from './Components/Protected_Routes/ProtectAdminRoutes';
+import AddUsers from './Components/Admin/AddUsers/AddUsers';
+import ChangePassword from './Components/ChangePassword/ChangePassword';
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
           {/* Admin Routes only Access Admin User */}
           <Route path="/admindashboard" element = {<ProtectedAdmin><AdminDashboard /></ProtectedAdmin>}>
                 <Route path="userinformation" element = {<UserInformation />}/>
+                <Route path="addusers" element = {<AddUsers />}/>
+                <Route path="changepassword" element={<ChangePassword />}/>
                 <Route index element = {<Profile />} />
           </Route>
          

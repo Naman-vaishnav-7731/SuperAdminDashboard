@@ -7,6 +7,8 @@ import DangerAlert from "../../Alerts/DangerAlert";
 import { Authcontext } from "../../../Context/AuthContext";
 import { UserSchema } from "../../../Validations/UserValidation";
 import DeleteAlert from "../Alters_buttons/DeleteAlert";
+// import Toster from "../../Tosters/Toster";
+import { ToastContainer, toast } from "react-toastify";
 const LoginUrl = "/users/"; 
 
 const EditUserForm = () => {
@@ -60,9 +62,9 @@ const EditUserForm = () => {
             Authorization: `Bearer ${JSON.parse(localStorage.getItem("Token"))}`,
           }
         });
-        console.log(response);
         setisForcerender(prev => prev + 1);
-      
+        setisDisabled(true);
+        if(response) toast.success('Successfully Updated Profile✅', { position: toast.POSITION.TOP_RIGHT });
       } catch (error) {
         console.log(error);
       }
@@ -80,6 +82,7 @@ const EditUserForm = () => {
       console.log(response);
       // forcefully re- render the component
       setisForcerender(prev => prev + 1);
+      if(response) toast.success('Successfully Deleted Profile✅', { position: toast.POSITION.TOP_RIGHT });
       
     } catch (error) {
       console.log(error);
@@ -193,7 +196,10 @@ const EditUserForm = () => {
             variant="success"
             type="button"
             className="w-40 "
-            onClick={() => setisDisabled(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setisDisabled(false)
+            }}
           >
             Edit Profile
           </Button>
@@ -213,6 +219,7 @@ const EditUserForm = () => {
         </Button>
       </Form>
       <DeleteAlert isDeleteAlert={isDeleteAlert} handleDeleteAlert={handleDeleteAlert}  HandleDelete={HandleDelete}/>
+      <ToastContainer />
     </div>
   );
 };

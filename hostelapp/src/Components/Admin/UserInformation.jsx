@@ -64,7 +64,7 @@ const UserInformation = () => {
     // Implement Debounching for Search Somthing after certain time
     const timeId = setTimeout(() => {
       setSearchQuery(event.target.value);
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timeId);
   };

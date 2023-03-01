@@ -11,7 +11,7 @@ const AdminDashboard = () => {
         <ul>
           <li>
             <a  onClick={() => navigate('/admindashboard')}>
-              Admin Profile
+              Admin Profile🧑‍💻
             </a>
           </li>
           <li >
@@ -20,7 +20,12 @@ const AdminDashboard = () => {
             </a>
           </li>
           <li>
-            <a href="#">
+            <a onClick={() => navigate("addusers")}>
+              Add Users
+            </a>
+          </li>
+          <li>
+            <a onClick={() => navigate("changepassword")}>
               Change Password
             </a>
           </li>

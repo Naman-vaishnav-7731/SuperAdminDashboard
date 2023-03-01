@@ -14,6 +14,9 @@ import UserProfileCard from "./UserProfileCard";
 import axios from "../../api/axios";
 import { useContext } from "react";
 import { UserSchema } from "../../Validations/UserValidation";
+import Toster from "../Tosters/Toster";
+import { ToastContainer, toast } from "react-toastify";
+
 
 
 const URL = "/users/";
@@ -59,6 +62,12 @@ const Profile = () => {
     pincode: isuserData?.pincode,
   };
 
+  // const showToastMessage = () => {
+  //   toast.success("Success", {
+  //     position: toast.POSITION.TOP_RIGHT,
+  //   });
+  // };
+
   // implements formik for form validation
   const {
     handleBlur,
@@ -81,12 +90,16 @@ const Profile = () => {
         });
         setisForcerender(prev => prev + 1);
         setisDislabled(true);
-        
+        if(response){
+          toast.success('Successfully Updated Profile', { position: toast.POSITION.TOP_RIGHT })
+        }
+       
       } catch (error) {
         console.log(error);
       }
     },
   });
+ 
 
   return (
     <>
@@ -191,7 +204,9 @@ const Profile = () => {
                       className="btn-fill pull-right"
                       type="button"
                       variant="info"
-                      onClick={() => setisDislabled(false)}
+                      onClick={() => {
+                        setisDislabled(false);
+                      }}
                     >
                       Update Profile
                     </Button>
@@ -226,6 +241,7 @@ const Profile = () => {
             <UserProfileCard {...user} isuserData={isuserData}/>
           </Col>
         </Row>
+        <ToastContainer />
       </Container>
     </>
   );
