@@ -1,0 +1,23 @@
+.carousel {
+    height: 100vh;
+    width: 100%;
+    overflow:hidden;
+  }
+  
+  .carousel-inner {
+    height:100%;    
+
+  }
+  
+  .carousel-item {
+    height: 100%;
+  }
+  
+  .carousel-item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }
+  

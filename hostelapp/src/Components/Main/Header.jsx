@@ -14,10 +14,10 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <><Container style={{height:"9vh"}}></Container>
-      <Navbar bg="light" expand="md" fixed="top">
+    // <Container style={{height:"9vh"}}></Container>
+    <><Navbar bg="light" expand="md" fixed="top">
         <Container>
-          <Navbar.Brand onClick={() => navigate('/')} style={{cursor:"pointer"}}>Trupti Hostel</Navbar.Brand>
+          <Navbar.Brand onClick={() => navigate('/')} style={{cursor:"pointer"}}>Ecommerce</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-nav" />
           <Navbar.Collapse id="navbar-nav">
             <Nav className="ml-auto">
