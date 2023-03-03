@@ -9,11 +9,6 @@ const validateRegistartion = require("../Validations/Registration");
 const validatelogin = require("../Validations/login");
 const validateUpdateProfile = require("../Validations/UpdateProfile");
 
-// // get the users | @route /users | @access Private
-// const getUser = asyncHandler(async (req , res) => {
-//     const users = await Users.findAll();
-//     res.status(200).send(users);
-// })
 
 // get pagination | page no and | size of one page
 const getPagination = (page, size) => {
@@ -231,3 +226,7 @@ module.exports = {
   CurrentUser,
   getUserData,
 };
+
+
+
+

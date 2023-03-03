@@ -29,7 +29,7 @@ const Protect = asyncHandler(async (req, res, next) => {
       if(userData.userType == "admin"){
         next();
       }else{
-          throw new Error("Not Authorized")
+          throw new Error("Not Authorized");
       }
 
 
@@ -42,7 +42,7 @@ const Protect = asyncHandler(async (req, res, next) => {
 
   if(!Token){
     res.status(401);
-    throw new Error("Not Autorized & No TOken")
+    throw new Error("Not Autorized & No TOken");
   }
 });
 

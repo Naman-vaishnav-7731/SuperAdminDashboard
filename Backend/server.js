@@ -17,11 +17,15 @@ app.use(cors(corsOptions));
 // parse the request body
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// define a middleware
+
 // /users is common route
 app.use('/users' , require('./Routes/UsersRoutes'));
-app.use(ErrorHandler);
 
+// @Route (/admin) is common route
+app.use('/admin' , require("./Routes/AdminRoutes"));
+
+
+app.use(ErrorHandler);
 
 
 app.listen(Port, () => {

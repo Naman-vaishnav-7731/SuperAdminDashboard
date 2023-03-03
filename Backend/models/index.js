@@ -30,28 +30,14 @@ db.Sequelize = Sequelize;
 
 // user and image for store user profile
 db.users = require("./Users")(sequelize , Sequelize.DataTypes);
-// db.images = require("./Images")(sequelize , Sequelize.DataTypes);
+
+//@Admin Model | Super Admin Model
+db.admin = require('./Admin/Admin')(sequelize , Sequelize.DataTypes);
 
 
 db.sequelize.sync({ force: false })
 .then(() => {
     console.log("re sync is done");
 })
-
-// // define one to one relationship
-// db.users.hasOne(db.images , {
-//   foreignKey: 'email', 
-//   as:'image',
-//   onDelete: 'CASCADE',
-//   onUpdate:'CASCADE'
-// });
-
-// // images table belongs to users table
-// db.images.belongsTo(db.users , {
-//    foreignKey: 'email', 
-//    as:'Users',
-//    onDelete: 'CASCADE',
-//    onUpdate:'CASCADE'
-// });
 
 module.exports = db;

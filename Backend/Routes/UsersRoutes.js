@@ -1,7 +1,10 @@
 const express = require('express');
 const Router = express.Router();
 const {RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser , getUserData} = require('../Controllers/UsersControllers')
+
+// Protect is middleware to identify authorized user
 const Protect = require('../middleware/Authmiddleware')
+
 // upload image
 const multer = require('multer');
 

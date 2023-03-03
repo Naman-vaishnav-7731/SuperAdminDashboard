@@ -1,0 +1,71 @@
+//create a Super Admin model have attribute 
+    1 AdmimName
+    2 AdminEmail (PK)
+    3 AdminPassword
+-------------------------------------------------------------------------
+//Create a User Model Have attribute
+    1 UserEmail (pk)
+    2 UserPassword 
+--------------------------------------------------------------------------
+//Create a Permission model Have attribute
+    1 Permission_code [PK] enum('R' , 'C' , 'U' , 'D')
+    2 Permissions [Create , Read , update , Delete]
+--------------------------------------------------------------------------
+//Create a Resource Model Have attribute
+    1 Resource_Id [PK] 
+    2 Resouce_name 
+----------------------------------------------------------------------------
+// Create a Juncation Model Named User_resource_permission have attribute
+    1 User_email [Fk]
+    2 Resouce_Id [FK]
+    3 Permission_code [FK]
+------------------------------------------------------------------------------
+
+// Create a Customer Model Have attribute
+    1 Customer_id
+    2 Customer_firstName
+    3 Customer_lastName
+    3 Customer_email [PK]
+    4 Customer_password
+    5 Customer_Address 
+    6 Customer_pincode
+    7 Customer_city
+    8 Customer_Phone
+
+------------------------------------------------------------------------------
+
+//Create a Product Table
+    1 Product_id (PK)
+    2 Product_name 
+    3 Product_Desc
+    4 Product_price
+    5 Product_compare_price
+    6 SKU
+    7 Quanity_In_Stock
+-----------------------------------------------------------------------------------
+
+// Create a Variants Table
+    1 Product_id [FK]
+    2 Variant_id [PK]
+    3 Variant_name
+    4 Variant_Desc
+    5 Variant_Price
+
+-----------------------------------------------------------------------------------
+
+// create a Variant_Image model
+    1 Image_id [PK]
+    2 Variant_Id [FK]
+    3 Image
+    4 Is_default Boolean
+----------------------------------------------------------------------------------------
+
+Implemenation of Access - Permission Using A Juncation Table
+Impelement Many to Many Permission 
+
+
+
+
+
+
+
