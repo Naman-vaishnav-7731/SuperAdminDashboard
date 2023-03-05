@@ -14,6 +14,7 @@ import Dashboard from "./Components/SuperAdmin/Dashboard/SD_dashboard";
 import AdminHome from "./Components/SuperAdmin/SD_home";
 import AddCustomers from "./Components/SuperAdmin/Customers/AddCustomers";
 import ViewCustomers from "./Components/SuperAdmin/Customers/ViewCustomers";
+import AddRoles from "./Components/SuperAdmin/Roles/AddRoles";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
                     {/* Implements Customers Routes */}
                     <Route path="addcustomers" element={<AddCustomers />} />
                     <Route path="customers" element={<ViewCustomers />} />
+                    <Route path="addroles" element={<AddRoles />} />
               </Route>
         </Route>
     </Routes>

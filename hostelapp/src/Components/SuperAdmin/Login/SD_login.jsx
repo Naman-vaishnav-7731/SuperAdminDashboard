@@ -1,11 +1,19 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useFormik } from "formik";
-import { loginSchema } from "../../../Validations/SignInvalidations";
+import { adminloginSchema } from "../../../Validations/adminLoginValidation";
+import axios from "../../../api/axios";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+// Admin Login API Url
+const adminLoginurl = '/admin/login';
 
 const AdminLogin = () => {
+
+  const navigate = useNavigate();
   // Initial Values
   const intialValue = {
-    email: "",
+    admin_email: "",
     password: "",
   };
 
@@ -13,13 +21,35 @@ const AdminLogin = () => {
   const { handleBlur, handleChange, handleSubmit, errors, values, touched } =
     useFormik({
       initialValues: intialValue,
-      validationSchema:loginSchema,
+      validationSchema:adminloginSchema,
       onSubmit: async (values, action) => {
-        // Our logic here
-        console.log(values);
+        
+        try {
+           const response = await axios.post(adminLoginurl , values,
+            {
+              headers:{'Content-Type':'application/json'},
+              withCredentials:true
+        });
 
-        // for reset the form
+        if(response){
+          toast.success(`${response.data.message}`, { position: toast.POSITION.TOP_RIGHT })
+        }
+        const AdminData = {
+          admin_name:response?.data?.name,
+          admin_email:response?.data?.email
+        }
+
+         localStorage.setItem("adminData" , JSON.stringify(AdminData));
+         navigate("dashboard");
+
         action.resetForm();
+        } catch (error) {
+          console.log(error);
+          // if Some errors is occurs
+          if(error){
+            toast.error(`${error.response.data.message}`, { position: toast.POSITION.TOP_RIGHT });
+          }
+        }
       },
     });
 
@@ -35,12 +65,12 @@ const AdminLogin = () => {
           <Form.Control
             type="email"
             placeholder="Enter email"
-            name="email"
+            name="admin_email"
             onChange={handleChange}
             onBlur={handleBlur}
-            value={values.email}
+            value={values.admin_email}
           />
-            {touched.email && errors.email ? (
+            {touched.admin_emai && errors.admin_emai ? (
                 <Form.Text className="text-danger">{errors.email}</Form.Text>
               ) : null}
         </Form.Group>
@@ -65,7 +95,9 @@ const AdminLogin = () => {
           Login
         </Button>
       </Form>
+      <ToastContainer />
     </Container>
+  
   );
 };
 

@@ -4,6 +4,7 @@ const ErrorHandler = require('./middleware/ErrorHandler');
 const dotEnv = require('dotenv').config();
 const app = express();
 const cors = require('cors')
+const cookieParser = require("cookie-parser");
 const Port = process.env.PORT || 3000;
 
 var corsOptions = {
@@ -17,6 +18,8 @@ app.use(cors(corsOptions));
 // parse the request body
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// Parse The Cookie
+app.use(cookieParser());
 
 // /users is common route
 app.use('/users' , require('./Routes/UsersRoutes'));
@@ -24,6 +27,14 @@ app.use('/users' , require('./Routes/UsersRoutes'));
 // @Route (/admin) is common route
 app.use('/admin' , require("./Routes/AdminRoutes"));
 
+//@Routes (/role) is common route
+app.use('/role' , require("./Routes/RoleRoutes"));
+
+//@Routes /user is commom Routes for use
+app.use('/user' , require("./Routes/UserRoutes"));
+
+//@Route /rule is common route
+app.use('/rule' , require("./Routes/RuleRoutes"));
 
 app.use(ErrorHandler);
 

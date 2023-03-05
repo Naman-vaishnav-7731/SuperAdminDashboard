@@ -16,11 +16,11 @@ function UserDropdown() {
   return (
     <Dropdown>
       <Dropdown.Toggle variant="success" id="dropdown-basic">
-        {userData.fname + " " + userData.lname} 🙂
+        {userData?.fname + " " + userData?.lname} 🙂
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {userData.userType == "admin" ? (
+        {userData?.userType == "admin" ? (
           <Dropdown.Item onClick={() => navigate("/admindashboard")}>
             Admin Dashboard
           </Dropdown.Item>

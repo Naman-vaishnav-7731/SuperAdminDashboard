@@ -5,7 +5,7 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { FaUserCircle } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 import { AiOutlineBars } from "react-icons/ai";
-
+import "../../../css/sideNav.css";
 
 const AdminSidenav = () => {
   const navigate = useNavigate();
@@ -21,23 +21,49 @@ const AdminSidenav = () => {
           <li>
             <DropdownButton
               id="dropdown-basic-button"
-              variant="light"
-              title={"Customers"}
+              title={"Roles"}
+              variant="outline-light"
             >
-              <Dropdown.Item onClick={() => navigate('addcustomers')} className="text-dark">
-                   Add Customers
+              <Dropdown.Item
+                onClick={() => navigate("addroles")}
+                className="text-dark"
+              >
+                Add Roles
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => navigate('customers')} className="text-dark">
-                   View Customers
+              <Dropdown.Item
+                onClick={() => navigate("customers")}
+                className="text-dark"
+              >
+                View Roles
               </Dropdown.Item>
             </DropdownButton>
           </li>
           <li>
             <DropdownButton
               id="dropdown-basic-button"
-              variant="light"
+              type="button"
+              title={"Customers"}
+              variant="outline-light"
+            >
+              <Dropdown.Item
+                onClick={() => navigate("addcustomers")}
+                className="text-dark"
+              >
+                Add Customers
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => navigate("customers")}
+                className="text-dark"
+              >
+                View Customers
+              </Dropdown.Item>
+            </DropdownButton>
+          </li>
+          <li>
+            <DropdownButton
+              id="dropdown-basic-button"
+              variant="outline-light"
               title={"Users"}
-            
             >
               <Dropdown.Item href="#/action-1" className="text-dark">
                 Add Users

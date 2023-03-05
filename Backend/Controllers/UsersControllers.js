@@ -9,7 +9,6 @@ const validateRegistartion = require("../Validations/Registration");
 const validatelogin = require("../Validations/login");
 const validateUpdateProfile = require("../Validations/UpdateProfile");
 
-
 // get pagination | page no and | size of one page
 const getPagination = (page, size) => {
   // limit qual size of one page
@@ -134,25 +133,27 @@ const LoginUser = asyncHandler(async (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  const userData = await Users.findOne({ where: { email: req.body.email } });
 
-  // compare user password with hashpassword
-  if (
-    userData &&
-    (await bcrypt.compare(req.body.password, userData.password))
-  ) {
-    res
-      .status(200)
-      .json({
+  try {
+    const userData = await Users.findOne({ where: { email: req.body.email } });
+    // compare user password with hashpassword
+    if (
+      userData &&
+      (await bcrypt.compare(req.body.password, userData.password))
+    ) {
+      res.status(200).json({
         Token: genreteToken(userData.id),
         fname: userData.fname,
         lname: userData.lname,
         userType: userData.userType,
         email: userData.email,
       });
-  } else {
-    res.status(400).json({ message: "Email and password is not match" });
-    throw new Error("Email and password is not match");
+    } else {
+      res.status(400).json({ message: "Email and password is not match" });
+      throw new Error("Email and password is not match");
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -226,7 +227,3 @@ module.exports = {
   CurrentUser,
   getUserData,
 };
-
-
-
-

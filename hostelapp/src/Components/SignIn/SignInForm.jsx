@@ -46,6 +46,7 @@ const SignInForm = () => {
               }
             );
             
+            console.log(response);  
             // store access token and userdata in localstorage
             const accessToken = response?.data?.Token;
             const userData = {

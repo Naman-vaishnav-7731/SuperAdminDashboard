@@ -148,7 +148,7 @@ const Profile = () => {
                           type="email"
                           name="email"
                           value={values.email}
-                          onChange={handleChange}
+                          onChange={handleChange}s
                           onBlur={handleBlur}
                           disabled={isDislabled}
                         ></Form.Control>
