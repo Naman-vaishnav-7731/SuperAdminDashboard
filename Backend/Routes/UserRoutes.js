@@ -1,12 +1,15 @@
 const express = require('express');
 const Router = express.Router();
-const {getUsers , addUser , updateUser , deleteUser} = require("../Controllers/UserControllers");
+const {getUsers , addUser , updateUser , deleteUser , getUser} = require("../Controllers/UserControllers");
 
 // AdminAuth Middleware to Verfiy Correct Token
 const AdminAuth = require('../middleware/AdminAuthMiddleware');
 
-// Get all Roles
+// Get all user
 Router.route('/').get([AdminAuth , getUsers]);
+
+// Get User
+Router.route('/:user_email').get([AdminAuth , getUser]);
 
 // Add Roles
 Router.route('/').post([AdminAuth , addUser]);
@@ -17,7 +20,6 @@ Router.route('/:user_email').put([AdminAuth , updateUser]);
 // Add Roles
 Router.route('/:user_email').delete([AdminAuth , deleteUser]);
 
-// // add permissons for users
 // Router.route("/addpermission").post([AdminAuth , addPermission]);
 
 module.exports = Router;

@@ -10,12 +10,7 @@ select * from admin;
 select * from User_Permission;
 select * from permission_rule;
 select * from user;
-
-
-
-
 select * from permission_rule where id = 1;
-;
 show tables;
 DESC admin;
 DESC images;

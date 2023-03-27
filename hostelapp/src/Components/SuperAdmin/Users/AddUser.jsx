@@ -54,7 +54,7 @@ const AddUser = () => {
     });
 
   return (
-    <Form className="border border-muted p-3" onSubmit={handleSubmit}>
+    <Form className="border border-muted p-3 w-75 m-auto" onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
         <Form.Label className="text-dark">User Email</Form.Label>
         <Form.Control

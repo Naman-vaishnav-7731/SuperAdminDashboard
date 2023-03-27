@@ -54,6 +54,50 @@ const getUsers = asyncHandler(async (req, res) => {
   }
 });
 
+// @DESC - GetUser with Permission | @Route - /user:email  | @Access - Private
+const getUser = asyncHandler(async (req, res) => {
+  const userEmail = req.authEmail;
+  try {
+
+    const AllUsers = [];
+      let obj = {};
+      obj.user = await user.findOne({ where: { user_email: req.params.user_email } });
+
+      const userPermission = await User_Permission.findAll({
+        where: { userUserEmail: obj.user.user_email },
+      });
+
+      obj.AllPermissions = [];
+      for (let element of userPermission) {
+        console.log(element.PermissionRuleId);
+        const obj2 = {};
+        const permission = await Permission_Rule.findAll({
+          where: { id: element.PermissionRuleId },
+        });
+
+        // Fetch all Rules Accosicated With Permissions
+        for(let ele of permission){
+          obj2.rule = await Rule.findAll({where:{Rule_id:ele.RuleRuleId}});
+        }
+
+        // Fetch ALl Permission Accoisted with Permissions
+        for(let ele of permission){
+          obj2.Permissions = await Permission.findAll({where:{Permission_code:ele.PermissionPermissionCode}});
+        }
+
+        
+        obj.AllPermissions.push(obj2);
+      }
+
+      AllUsers.push(obj);
+
+    res.status(200).json(AllUsers);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({error});
+  }
+});
+
 // @DESC - Add user | @Route - /user | @Access - Private
 const addUser = asyncHandler(async (req, res) => {
   const { user_email, password, RoleRoleName, checked } = req.body;
@@ -117,6 +161,7 @@ const addUser = asyncHandler(async (req, res) => {
   });
 });
 
+
 //@DESC - Update user | @Route - /user/:email | @Access - Private
 const updateUser = asyncHandler(async (req, res) => {
   const { user_email } = req.params;
@@ -151,6 +196,7 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+
 //@DESC - Update user | @Route - /user/:email | @Access - Private
 const deleteUser = asyncHandler(async (req, res) => {
   const { user_email } = req.params;
@@ -177,4 +223,4 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUsers, addUser, updateUser, deleteUser };
+module.exports = { getUsers, addUser, updateUser, deleteUser , getUser };

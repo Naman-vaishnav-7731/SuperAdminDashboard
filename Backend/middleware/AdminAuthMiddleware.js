@@ -11,6 +11,7 @@ const User_Permission = db.User_Permission;
 
 
 const AdminAuth = async (req, res, next) => {
+
   let Token;
   if (
     req.headers.authorization &&
@@ -31,7 +32,9 @@ const AdminAuth = async (req, res, next) => {
       if (!adminEmail && !userEmail) {
         return res.status(401).json({ message: "Unauthorized" });
       }
-      
+      if(userEmail){
+        req.authEmail = userEmail.user_email;
+      }
       next();
     } catch (error) {
       return res.status(400).send(error.message);

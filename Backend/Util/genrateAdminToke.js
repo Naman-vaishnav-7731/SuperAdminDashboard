@@ -8,4 +8,4 @@ const genreteToken = (email) => {
     );
 };
 
-module.exports = genreteToken;  
+module.exports = genreteToken;
