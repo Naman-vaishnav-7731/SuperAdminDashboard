@@ -15,20 +15,23 @@ function UserDropdown() {
   };
   return (
     <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
-        {userData?.fname + " " + userData?.lname} 🙂
+      <Dropdown.Toggle
+        variant="muted"
+        id="dropdown-basic"
+        className="border border-muted"
+        style={{ borderRadius: "50px" }}
+      >
+        <img
+          src="userImage/profileImage-1677500188652.jpg"
+          width={40}
+          style={{ borderRadius: "50px" }}
+        />
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {userData?.userType == "admin" ? (
-          <Dropdown.Item onClick={() => navigate("/admindashboard")}>
-            Admin Dashboard
-          </Dropdown.Item>
-        ) : (
-          <Dropdown.Item onClick={() => navigate("/profile")}>
-            Profile
-          </Dropdown.Item>
-        )}
+        <Dropdown.Item onClick={() => navigate("/admindashboard")}>
+          Profile
+        </Dropdown.Item>
 
         <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
       </Dropdown.Menu>

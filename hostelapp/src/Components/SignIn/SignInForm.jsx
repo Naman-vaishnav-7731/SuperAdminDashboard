@@ -9,7 +9,9 @@ import { useContext } from "react";
 import { useState } from "react";
 import { Authcontext } from "../../Context/AuthContext";
 import { ModalContext } from "../../Context/ModalContext";
+import Swal from "sweetalert2";
 const LoginUrl = "/users/login";
+
 
 const SignInForm = () => {
 
@@ -45,8 +47,9 @@ const SignInForm = () => {
                 withCredentials:true
               }
             );
-            
-            console.log(response);  
+            if(response){
+              Swal.fire("Successfully Login" , "" , 'success');
+            }
             // store access token and userdata in localstorage
             const accessToken = response?.data?.Token;
             const userData = {
@@ -59,13 +62,10 @@ const SignInForm = () => {
             localStorage.setItem("Token" , JSON.stringify(accessToken));
 
             action.resetForm();
-            setisAlertColor("success");
-            setisError(["Sucessfully Logged 🎉🎉"]);
             setIslogged(true);
             setisSigninShow(false);
             
-           
-      } catch (error) {
+        } catch (error) {
           console.log(error);
           console.log(error);
           if(error.response.status == 400){
@@ -73,8 +73,11 @@ const SignInForm = () => {
               Object.keys(error.response.data).forEach((ky)=>{
                 arr.push(error.response.data[ky]);
               })
-               setisAlertColor('danger');
-               setisError(arr);
+              Swal.fire(`${
+                arr.map((element) => {
+                   return element + "<br />";
+                })
+              }` , "" , 'error');
                setisSignupAlert(true);
             }
         }

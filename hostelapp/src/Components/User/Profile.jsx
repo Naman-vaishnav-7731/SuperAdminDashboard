@@ -30,7 +30,7 @@ const Profile = () => {
   const user = {
     name: isuserData?.fname + " " +  isuserData?.lname,
     username: isuserData?.fname,
-    bio: `Hello ! I m ${isuserData?.fname + " " +  isuserData?.lname} 🧑‍💻. I m Also User StudyHub`,
+    bio: `Hello ! I m ${isuserData?.fname + " " +  isuserData?.lname} 🧑‍💻. I m Also Customer of Ecommerce Store`,
     imageSrc:`/userimage/${isuserData.image}`
   };
 

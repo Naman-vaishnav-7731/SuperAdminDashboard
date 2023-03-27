@@ -4,12 +4,12 @@ import { adminloginSchema } from "../../../Validations/adminLoginValidation";
 import axios from "../../../api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 // Admin Login API Url
-const adminLoginurl = '/admin/login';
+const adminLoginurl = "/admin/login";
 
 const AdminLogin = () => {
-
   const navigate = useNavigate();
   // Initial Values
   const intialValue = {
@@ -21,33 +21,48 @@ const AdminLogin = () => {
   const { handleBlur, handleChange, handleSubmit, errors, values, touched } =
     useFormik({
       initialValues: intialValue,
-      validationSchema:adminloginSchema,
+      validationSchema: adminloginSchema,
       onSubmit: async (values, action) => {
-        
         try {
-           const response = await axios.post(adminLoginurl , values,
-            {
-              headers:{'Content-Type':'application/json'},
-              withCredentials:true
-        });
+          const response = await axios.post(adminLoginurl, values, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          });
+          console.log(response);
 
-        if(response){
-          toast.success(`${response.data.message}`, { position: toast.POSITION.TOP_RIGHT })
-        }
-        const AdminData = {
-          admin_name:response?.data?.name,
-          admin_email:response?.data?.email
-        }
+          if (response) {
+            Swal.fire({
+              icon: "success",
+              title: "Succesfully Login",
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              navigate("dashboard");
+            });
+          }
+          // Admin some details
+          const AdminData = {
+            admin_name: response?.data?.name,
+            admin_email: response?.data?.email,
+          };
 
-         localStorage.setItem("adminData" , JSON.stringify(AdminData));
-         navigate("dashboard");
+          // Store Access Token
+          const AccessToken = response?.data?.Token;
 
-        action.resetForm();
+          localStorage.setItem("adminData", JSON.stringify(AdminData));
+          localStorage.setItem("Token", JSON.stringify(AccessToken));
+
+          action.resetForm();
         } catch (error) {
           console.log(error);
           // if Some errors is occurs
-          if(error){
-            toast.error(`${error.response.data.message}`, { position: toast.POSITION.TOP_RIGHT });
+          if (error) {
+            Swal.fire({
+              icon: "error",
+              title: 'Oops...',
+              text: `${error.response.data.message}`,
+              showConfirmButton: true,
+            })
           }
         }
       },
@@ -70,9 +85,9 @@ const AdminLogin = () => {
             onBlur={handleBlur}
             value={values.admin_email}
           />
-            {touched.admin_emai && errors.admin_emai ? (
-                <Form.Text className="text-danger">{errors.email}</Form.Text>
-              ) : null}
+          {touched.admin_emai && errors.admin_emai ? (
+            <Form.Text className="text-danger">{errors.email}</Form.Text>
+          ) : null}
         </Form.Group>
         <br />
 
@@ -87,8 +102,8 @@ const AdminLogin = () => {
             value={values.password}
           />
           {touched.password && errors.password ? (
-                <Form.Text className="text-danger">{errors.password}</Form.Text>
-              ) : null}
+            <Form.Text className="text-danger">{errors.password}</Form.Text>
+          ) : null}
         </Form.Group>
 
         <Button variant="primary" type="submit" className="w-100 mt-3">
@@ -97,7 +112,6 @@ const AdminLogin = () => {
       </Form>
       <ToastContainer />
     </Container>
-  
   );
 };
 

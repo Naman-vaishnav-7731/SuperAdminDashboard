@@ -4,6 +4,7 @@ const {RegisterUser , DeleteUser , UpdateUser , LoginUser ,CurrentUser , getUser
 
 // Protect is middleware to identify authorized user
 const Protect = require('../middleware/Authmiddleware')
+const Auth = require('../middleware/AdminAuthMiddleware')
 
 // upload image
 const multer = require('multer');
@@ -16,7 +17,7 @@ const multer = require('multer');
         },
         filename:(req , file , callback) => {
             console.log({file})
-            callback(null , file.fieldname + "-" + Date.now() + ".jpg");
+            callback(null , file.fieldname  + "-" + Date.now() + ".jpg");
         }
 
     })
@@ -29,7 +30,7 @@ const multer = require('multer');
 
 //Implenet Routes for Pagination and filter 
 // /users/
-Router.route('/').get([Protect , getUserData]);
+Router.route('/').get([Auth , getUserData]);
 
 // Router for create the user profile | Register
 // implement the server side validation

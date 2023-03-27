@@ -2,9 +2,6 @@ import AdminHeader from "./AD_Header";
 import { Outlet, useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import { FaUserCircle } from "react-icons/fa";
-import { Button } from "react-bootstrap";
-import { AiOutlineBars } from "react-icons/ai";
 import "../../../css/sideNav.css";
 
 const AdminSidenav = () => {
@@ -31,10 +28,44 @@ const AdminSidenav = () => {
                 Add Roles
               </Dropdown.Item>
               <Dropdown.Item
-                onClick={() => navigate("customers")}
+                onClick={() => navigate("roles")}
                 className="text-dark"
               >
                 View Roles
+              </Dropdown.Item>
+            </DropdownButton>
+          </li>
+          <li>
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={"Rules"}
+              variant="outline-light"
+            >
+              <Dropdown.Item
+                onClick={() => navigate("addrules")}
+                className="text-dark"
+              >
+                Add Rules
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => navigate("rules")}
+                className="text-dark"
+              >
+                View Rules
+              </Dropdown.Item>
+            </DropdownButton>
+          </li>
+          <li>
+            <DropdownButton
+              id="dropdown-basic-button"
+              variant="outline-light"
+              title={"Users"}
+            >
+              <Dropdown.Item onClick={() => navigate("addusers")} className="text-dark">
+                Add Users
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => navigate("viewuser")}className="text-dark">
+                View Users
               </Dropdown.Item>
             </DropdownButton>
           </li>
@@ -62,19 +93,23 @@ const AdminSidenav = () => {
           <li>
             <DropdownButton
               id="dropdown-basic-button"
+              type="button"
+              title={"Product"}
               variant="outline-light"
-              title={"Users"}
             >
-              <Dropdown.Item href="#/action-1" className="text-dark">
-                Add Users
+              <Dropdown.Item
+                onClick={() => navigate("addproduct")}
+                className="text-dark"
+              >
+                Add Product
               </Dropdown.Item>
-              <Dropdown.Item href="#/action-2" className="text-dark">
-                View Users
+              <Dropdown.Item
+                onClick={() => navigate("viewproduct")}
+                className="text-dark"
+              >
+                View Product
               </Dropdown.Item>
             </DropdownButton>
-          </li>
-          <li>
-            <a href="#">Products</a>
           </li>
         </ul>
       </div>

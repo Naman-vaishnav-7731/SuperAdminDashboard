@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const db = require('../models');
 const Rule = db.rule;
+const Permission = db.permission;
 
 
 // @DESC - Get all Rule | @Route - /rule/ | @Access - Private Only Super Admin  
@@ -14,21 +15,43 @@ const getRules = asyncHandler(async (req , res) => {
     }
 });
 
+
+//----------------------------------------Add Rules------------------------------------------------
+
 // @DESC - Add Rule | @Route - /rule/ | @Access - Private
 const addRule = asyncHandler(async (req , res) => {
-    const {Rule_id , Rule_name} = req.body;
+    const {Rule_name} = req.body;
+    console.log(Rule_name);
 
-    // If Role is already Exits
-    const ruleExits = await Rule.findOne({where:{Rule_id:Rule_id}})
+
+    // If Rule is already Exits
+    const ruleExits = await Rule.findOne({where:{Rule_name:Rule_name}})
     if(ruleExits){
         return res.status(400).json({message:"oops ! Sir Rule is Already Exits"});
     }
 
     try {
         const rule = await Rule.create({
-            Rule_id,
             Rule_name
         });
+
+        //fetch all permissions
+        const AllPermissions = await Permission.findAll();
+        
+        const PermissionArr = [];
+        AllPermissions.map((element) => {
+            PermissionArr.push(element.Permission_code);
+        });
+
+        PermissionArr.map(async (Permission_code) => {
+
+            //Find The Permission
+            const PermissionRecord = await Permission.findOne({where:{Permission_code}});
+            const RuleRecord = await Rule.findOne({where:{Rule_name}});
+
+            // Addpermission on Rules
+            await PermissionRecord.addRule(RuleRecord);
+        })
         
         if(rule){
             res.status(200).json({message:"Sucessfully Added rule"})
@@ -39,6 +62,8 @@ const addRule = asyncHandler(async (req , res) => {
     }
 });
 
+//------------------------------------------------------------------------------------------------
+
 //@DESC - Update Rule | @Route - /rule/:ruleid | @Access - Private
 const updateRule = asyncHandler(async (req , res) => {
     const {Rule_id} = req.params;
@@ -48,6 +73,9 @@ const updateRule = asyncHandler(async (req , res) => {
         const ruleid = await Rule.findOne({where:{Rule_id:Rule_id}});
         if(!ruleid){
              return res.status(404).json({message:"Oops ! Rule id is not found"})
+        }
+        if(ruleid.Rule_name == req.body.Rule_name){
+            return res.status(400).json({message:`${req.body.Rule_name} is already exits`});
         }
     } catch (error) {
         console.log(error);

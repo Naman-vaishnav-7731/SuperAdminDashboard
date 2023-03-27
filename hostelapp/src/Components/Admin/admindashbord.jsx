@@ -7,21 +7,11 @@ const AdminDashboard = () => {
   return (
     <div class="wrapper">
       <div class="sidebar">
-        <h5>Admin🙂Dashboard</h5>
+        <h5 style={{marginTop:"80px"}}>Customer🙂Dashboard</h5>
         <ul>
           <li>
             <a  onClick={() => navigate('/admindashboard')}>
-              Admin Profile🧑‍💻
-            </a>
-          </li>
-          <li >
-            <a onClick={() => navigate("userinformation")}>
-              User Information
-            </a>
-          </li>
-          <li>
-            <a onClick={() => navigate("addusers")}>
-              Add Users
+              Profile🧑‍💻
             </a>
           </li>
           <li>
@@ -44,7 +34,7 @@ const AdminDashboard = () => {
       </div>
       <div class="main_content">
         <div class="header">Welcome Admin🧑‍💻🧑‍💻!! Have a nice day.</div>
-        <div class="info">
+        <div class="info mt-5">
           <div>
             <Outlet />
           </div>

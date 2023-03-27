@@ -3,11 +3,13 @@ module.exports = ( sequelize , DataTypes ) => {
         Role_id:{
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true
+            autoIncrement: true,
+            unique: true
         },
         Role_name:{
             type: DataTypes.STRING,
             allowNull: false,
+            primaryKey: true
         },
     },{
         freezeTableName: true

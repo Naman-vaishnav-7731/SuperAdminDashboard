@@ -3,8 +3,27 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { FaUserCircle } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 import { AiOutlineBars } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const AdminHeader = () => {
+  const navigate = useNavigate();
+
+  const hadleLogout = async () => {
+    // here logout code
+    Swal.fire({
+      icon: "warning",
+      title: "Logout",
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Logout",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        navigate("/admin");
+      }
+    });
+  };
   return (
     <div className="header d-flex justify-content-between align-item-center">
       <div className="left-nav">
@@ -22,7 +41,7 @@ const AdminHeader = () => {
           title={<FaUserCircle style={{ fontSize: "25px" }} />}
         >
           <Dropdown.Item href="#/action-1">Change Password</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Logout</Dropdown.Item>
+          <Dropdown.Item onClick={hadleLogout}>Logout</Dropdown.Item>
         </DropdownButton>
       </div>
     </div>

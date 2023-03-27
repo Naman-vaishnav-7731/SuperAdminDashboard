@@ -2,51 +2,56 @@
 // Super Admin Can add multiple Roles
 import { Container, Form, Button } from "react-bootstrap";
 import { useFormik } from "formik";
+import axios from "../../../api/axios";
+import { ToastContainer, toast } from "react-toastify";
+const URL = "/role/";
 
 const AddRoles = () => {
+  // Intial Values
+  const intialValue = {
+    Role_name: "", 
+  };
 
-    // Intial Values
-    const intialValue = {
-        role_id:"",
-        role_name:""
-    }
-
-    const {handleBlur , handleChange , handleSubmit , values} = useFormik({
-        initialValues:intialValue,
-        onSubmit:async (values , action) => {
-            console.log(values)
-            action.resetForm();
+  const { handleBlur, handleChange, handleSubmit, values } = useFormik({
+    initialValues: intialValue,
+    onSubmit: async (values, action) => {
+      try {
+        const response = await axios.post(URL, values, {
+          headers: {
+            "Content-Type": "Application/json",
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("Token")
+            )}`,
+          withCredentials:true
+        }});
+        if (response) {
+          toast.success(response.data.message);
         }
-    })
+        action.resetForm();
+      } catch (error) {
+        console.log(error);
+        toast.error(error.response.data.message);
+      }
+    },
+  });
 
   return (
-    <Container className="d-flex flex-column align-items-center justify-content-center min-vh-50">
+    <Container className="d-flex flex-column align-items-center justify-content-center min-vh-50 mt-5">
       <div className=" text-center text-dark">
-        <h4>Add Roles For Our Ecommerce Store🛒 </h4>
+        <h4>Add Roles | Ecommerce Store🛒 </h4>
       </div>
       <Form className="border rounded p-4" onSubmit={handleSubmit}>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label className="text-dark">Role_Id</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Enter Role id"
-            name="role_id"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.role_id}
-          />
-        </Form.Group>
-        <br />
 
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Role Name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Role Name"
-            name="role_name"
+            name="Role_name"
             onChange={handleChange}
             onBlur={handleBlur}
-            value={values.role_name}
+            value={values.Role_name}
+            required
           />
         </Form.Group>
 
@@ -54,6 +59,7 @@ const AddRoles = () => {
           Add Role
         </Button>
       </Form>
+      <ToastContainer />
     </Container>
   );
 };

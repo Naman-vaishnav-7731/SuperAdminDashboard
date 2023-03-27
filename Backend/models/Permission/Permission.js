@@ -8,6 +8,7 @@ module.exports = ( sequelize , DataTypes ) => {
         Permission_name:{
             type: DataTypes.STRING,
             allowNull: false,
+            
         },
     },{
         freezeTableName: true

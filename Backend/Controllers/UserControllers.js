@@ -4,33 +4,66 @@ const user = db.user;
 const role = db.role;
 const Rule = db.rule;
 const Permission = db.permission;
+const Permission_Rule = db.Permission_Rule;
+const User_Permission = db.User_Permission;
 const brcypt = require("bcrypt");
 
 // @DESC - Get all Users | @Route - /user | @Access - Private Only Super Admin
 const getUsers = asyncHandler(async (req, res) => {
   try {
-    const users = await user.findAll({ include: role });
-    res.status(200).json(users);
+    const users = await user.findAll();
+    const AllUsers = [];
+
+    for (let ele of users) {
+      let obj = {};
+      obj.user = await user.findOne({ where: { user_email: ele.user_email } });
+
+      const userPermission = await User_Permission.findAll({
+        where: { userUserEmail: obj.user.user_email },
+      });
+
+      obj.AllPermissions = [];
+      for (let element of userPermission) {
+        console.log(element.PermissionRuleId);
+        const obj2 = {};
+        const permission = await Permission_Rule.findAll({
+          where: { id: element.PermissionRuleId },
+        });
+
+        // Fetch all Rules Accosicated With Permissions
+        for(let ele of permission){
+          obj2.rule = await Rule.findAll({where:{Rule_id:ele.RuleRuleId}});
+        }
+
+        // Fetch ALl Permission Accoisted with Permissions
+        for(let ele of permission){
+          obj2.Permissions = await Permission.findAll({where:{Permission_code:ele.PermissionPermissionCode}});
+        }
+
+        
+        obj.AllPermissions.push(obj2);
+      }
+
+      AllUsers.push(obj);
+    }
+
+    res.status(200).json(AllUsers);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Some error is found while get user data" });
-    throw new Error("Some error is occurs");
+    console.log(error);
+    res.status(400).json({error});
   }
 });
 
 // @DESC - Add user | @Route - /user | @Access - Private
 const addUser = asyncHandler(async (req, res) => {
-  const { user_email, password, RoleRoleId } = req.body;
+  const { user_email, password, RoleRoleName, checked } = req.body;
+  console.log(checked);
 
   // check user_email is already exits or not
-  // If Role is already Exits
   try {
     const userExits = await user.findOne({ where: { user_email: user_email } });
     if (userExits) {
-      return res
-        .status(400)
-        .json({ message: "oops ! Sir User is Already Exits" });
+      return res.status(400).json({ message: "Oops ! User is Already Exits" });
     }
   } catch (error) {
     console.log(error);
@@ -40,7 +73,7 @@ const addUser = asyncHandler(async (req, res) => {
   const hasedPassword = await brcypt.hash(password, 10);
   const users = {
     user_email,
-    RoleRoleId,
+    RoleRoleName,
     password: hasedPassword,
   };
 
@@ -48,56 +81,41 @@ const addUser = asyncHandler(async (req, res) => {
   try {
     const adduser = await user.create(users);
 
-    if (addUser) {
+    if (adduser) {
       res.status(200).json({ message: "Sucessfully Add User" });
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Some error Found while Adding the user" });
   }
-});
 
-//@DESC Add User Permision | @Route- /user/addpermission | @Access Private
-const addPermission = asyncHandler(async (req, res) => {
-  
-// for multiple permission on multiple rules
-// it could be possible same user can have multiple permission on same rule or differnt rule
-  const {userPermission} = req.body;
+  // Split array
+  let userPermission = [];
+  for (let element of checked) {
+    let obj = {};
+    obj.permission_code = element.split("-")[1];
+    obj.Rule_id = element.split("-")[0];
+    userPermission.push(obj);
+  }
+  console.log(userPermission);
+
   userPermission.map(async (element) => {
-        try {
-                const user_email = element.user_email;
-                const Rule_id = element.rule_id;
-                const permission_code = element.permission_code;
-                
-                // Finding the userRecord | user is exits or not in DB
-                const userRecord = await user.findOne({ where: { user_email } });
-                if (!userRecord) {
-                return res.status(400).json({ message: "User not found" });
-                }
-
-                // Find the rule with the given ID
-                const ruleRecord = await Rule.findOne({where:{ Rule_id }});
-                if (!ruleRecord) {
-                    return res.status(400).json({ message: "Rule not found" });
-                }
-
-                // Find the permission with the given code
-                const permissionRecord = await Permission.findOne({ where: { permission_code } });
-                if (!permissionRecord) {
-                    return res.status(400).json({ message: "Permission not found" });
-                }
-
-                await ruleRecord.addPermission(permissionRecord);
-                await userRecord.addPermission(permissionRecord);
-                res.status(200).json({message:"Succesfully permission asssin"});
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({message:"Some error is occur while assing user permissions"});
-        }
+    // Find user
+    const userRecord = await user.findOne({
+      where: { user_email },
     });
-});
 
+    const Permission_Rule_Record = await Permission_Rule.findOne({
+      where: {
+        PermissionPermissionCode: element.permission_code,
+        RuleRuleId: element.Rule_id,
+      },
+    });
+
+    // add Permission to User
+    await Permission_Rule_Record.addUser(userRecord);
+  });
+});
 
 //@DESC - Update user | @Route - /user/:email | @Access - Private
 const updateUser = asyncHandler(async (req, res) => {
@@ -159,4 +177,4 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUsers, addUser, updateUser, deleteUser, addPermission };
+module.exports = { getUsers, addUser, updateUser, deleteUser };

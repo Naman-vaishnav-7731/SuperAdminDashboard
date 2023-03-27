@@ -8,6 +8,7 @@ const AuthProvider = (props) => {
     const [isUserData , setisUserData] = useState([]);
     const [isEditIndex , setisEditIndex] = useState(0);
     const [isForcerender , setisForcerender] = useState(0);
+    
     return(
         <Authcontext.Provider value={{Islogged , setIslogged , isUserData , setisUserData , isEditIndex , setisEditIndex , isForcerender , setisForcerender}}>
             {props.children}
